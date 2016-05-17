@@ -97,7 +97,12 @@ print(d)
 str(d)
 
 # demonstrate how R handles missing data
-# DO THIS!
+# make some data missing
+d[2, "x"] <- NA
+d[5, "y"] <- NA
+d[3, "z"] <- NA
+print(d)
+str(d)
 ```
 
 
@@ -106,7 +111,15 @@ str(d)
 1. Demonstrate how to check and change the modes and attributes of R objects.
 
 ```{r}
-# DO THIS
+x <- 1:10
+y <- letters[1:10]
+
+# check mode
+mode(x); mode(y)
+
+# change mode
+z <- as.character(x)
+mode(z)
 ```
 
 
@@ -185,7 +198,7 @@ identical(mat1, mat2)
 
 ```{r}
 arr2_elements <- sample(1:50, size = 3 * 6 * 2, replace = TRUE)
-arr2 <- array(arr2_elements, dim = c(3, 6, 2)
+arr2 <- array(arr2_elements, dim = c(3, 6, 2))
 
 arr + arr2
 arr * arr2
@@ -204,9 +217,17 @@ vec
 
 1. Demonstrate the different ways of subsetting a list.
 
-```{r}
-# dollar signs vs brackets vs double brackets
-# DO THIS
+```{r, eval = FALSE}
+d <- data.frame(matrix(1:9, ncol = 3))
+colnames(d) <- c("dog", "cat", "bird")
+
+# the following are equivalent
+d$dog
+d[, "dog"]
+
+# more complex subsetting
+d[1:2, c("cat", "bird")]
+d[d$dog > 1, "dog"]
 ```
 
 
@@ -339,7 +360,7 @@ For example:
 ```{r}
 x <- sample(40:60)
 y <- ifelse(x > 50, 10, 5)
-print(cbind(x, x > 50, y))
+print(data.frame(x = x, condition = x > 50, y = y))
 ```
 
 2. Demonstrate the use of a `for()` loop.
