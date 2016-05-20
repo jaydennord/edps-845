@@ -31,3 +31,8 @@ vignettes/*.pdf
 # Temporary files created by R markdown
 *.utf8.md
 *.knit.md
+
+# misc files don't want to add
+assignments/A2-nord.html
+assignments/omitted exercises.txt
+in-class/in-class-activity.Rmd

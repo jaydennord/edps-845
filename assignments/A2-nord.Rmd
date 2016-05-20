@@ -11,27 +11,36 @@ author: "Jayden Nord"
 Logical, integer, double, character, complex, and raw.
 
 2. What makes `is.vector()` and `is.numeric()` fundamentally different to `is.list()` and `is.character()`?
-   
-DO THIS!
+
+The functions `is.vector()` and `is.numeric()` are general mode tests. That is, `is.vector` returns `TRUE` for any mode that only has name attributes while `is.numeric()` will return `TRUE` for vectors of mode integer or double. 
+
+Meanwhile, the functions `is.list()` and `is.character()` are specific mode tests. They will return true if the object is specifically a list and specifically a character, respecitvely.
 
 3. Test your knowledge of vector coercion rules by predicting the output of the following uses of `c()`:
 
     ```{r, eval=FALSE}
-    c(1, FALSE)       # numeric vector of 1 0
-    c("a", 1)         # character vector of "a" "1"
-    c(list(1), "a")   # list of length 2 with a numeric value and character value
-    c(TRUE, 1L)       # numeric vector of 1 1
+    c(1, FALSE)   
+    c("a", 1)     
+    c(list(1), "a")
+    c(TRUE, 1L)   
     ```
+    
+```{r, collapse = TRUE}
+c(1, FALSE)       # numeric vector of 1 0
+c("a", 1)         # character vector of "a" "1"
+c(list(1), "a")   # list of length 2 with a numeric value and character value
+c(TRUE, 1L)       # numeric vector of 1 1
+```
 
 4. Why do you need to use `unlist()` to convert a list to an atomic vector? Why doesn't `as.vector()` work? 
 
-DO THIS!
+According to the help file for `as.vector()`, the function `as.vector()` does not coerce to atomic vectors but coerces to vectors of some given mode. List is a valid mode, so `as.vector()` coerces a list to a list. The function `unlist()` specifically flattens a list into an atomic vector.
 
 5. Why is `1 == "1"` true? Why is `-1 < FALSE` true? Why is `"one" < 2` false?
 
-    * `1 == "1"` is true because the numeric 1 is coerced to a character.
-    * `-1 < FALSE` is true because the logical FALSE is coerced to a numeric which turns out to be 0. 
-    * `"one" < 2` is false because first, the numeric 2 is coerced to a character. Certain characters are "greater" than others. `"one"` begins with the letter "o" which is greater than the character 2.
+* `1 == "1"` is true because the numeric 1 is coerced to a character.
+* `-1 < FALSE` is true because the logical FALSE is coerced to a numeric which turns out to be 0. 
+* `"one" < 2` is false because first, the numeric 2 is coerced to a character. Certain characters are "greater" than others. `"one"` begins with the letter "o" which is greater than the character 2.
 
 6. Why is the default missing value, `NA`, a logical vector? What's special
    about logical vectors? (Hint: think about `c(FALSE, NA_character_)`.)
@@ -44,16 +53,24 @@ There is no clear indication in the text. However, logical tends to be the botto
     structure(1:5, comment = "my attribute")
     ```
 
-    But when you print that object you don't see the comment attribute. Why? Is the attribute missing, or is there something else special about it? (Hint: try using help.) \index{attributes!comment}
+    But when you print that object you don't see the comment attribute. Why? Is the attribute missing, or is there something else special about it? (Hint: try using help.)
 
-DO THIS!
+By default, only object values are printed. The associated attributes are not printed but are still a part of the object. This fact can be confirmed with the `str()` or `attributes`  functions. For example:
+
+```{r, collapse = TRUE}
+x <- structure(1:5, comment = "my attribute")
+
+str(x)
+
+attributes(x)
+```
 
 8. What happens to a factor when you modify its levels? 
     
-```{r, results = "none"}
-f1 <- factor(letters)
-levels(f1) <- rev(levels(f1))
-```
+    ```{r, results = "none"}
+    f1 <- factor(letters)
+    levels(f1) <- rev(levels(f1))
+    ```
     
 The labels for the factors are substituted with the new set of labels. The underlying data is unchanged. To illustrate:
 
@@ -67,12 +84,15 @@ str(f1)
 
 9. What does this code do? How do `f2` and `f3` differ from `f1`?
 
-```{r, eval = FALSE}
-f2 <- rev(factor(letters))
+    ```{r, eval = FALSE}
+    f2 <- rev(factor(letters))
+    
+    f3 <- factor(letters, levels = rev(letters))
+    ```
 
-f3 <- factor(letters, levels = rev(letters))
-```
-DO THIS!    
+`f2` is the reverse vector of `f1` but has the same levels as `f1`. `f2` prints the alphabet backwards while `f1` prints the alphabet forwards.
+
+`f3` is the reverse vector of `f1` and has the reverse levels of `f1`. `f1` and `f3` print the alphabet forwards.
 
 10. What does `dim()` return when applied to a vector?
 
@@ -84,11 +104,11 @@ DO THIS!
 
 12. How would you describe the following three objects? What makes them different to `1:5`?
 
-```{r}
-x1 <- array(1:5, c(1, 1, 5))
-x2 <- array(1:5, c(1, 5, 1))
-x3 <- array(1:5, c(5, 1, 1))
-```
+    ```{r}
+    x1 <- array(1:5, c(1, 1, 5))
+    x2 <- array(1:5, c(1, 5, 1))
+    x3 <- array(1:5, c(5, 1, 1))
+    ```
 
 The set of `x`s are arrays of mode numeric with three dimensions, two of which have length 1 and the other of length 5. The vector `1:5` has only one dimension of length 5.
 
@@ -321,11 +341,12 @@ print(sum)
     c(c = c)
     ```
 
-DO THIS!
+The above code returns the value 10 with name "c". In `c(c=c)`, the first `c` is the concatenate function with argument `c = c`. The second `c` or the `c` immediately left of the equal sign is a name to be associated with whatever is to the right of the equal sign. The last `c` is the object `c` which holds the numeric value 10.
 
 6. What are the four principles that govern how R looks for values?
 
 The four principles are:
+
 * name masking
 * functions vs. variables
 * a fresh start
@@ -358,7 +379,12 @@ The above will return 202. Essentially, the function does `((10 ^ 2) + 1) * 2` w
     cor(m = "k", y = y, u = "p", x = x)
     ```
 
-DO THIS!
+    ```{r, eval = FALSE}
+    # clarified function calls
+    x <- sample(c(1:10, NA), size = 20, replace = TRUE)
+    y <- runif(n = 20, min = 0, max = 1)
+    cor(x, y, method = "kendall")
+    ```
 
 9.  What does this function return? Why? Which principle does it illustrate?
   
@@ -368,6 +394,8 @@ DO THIS!
     }
     f1()
     ```
+
+The above function returns the value 3. 
 
 DO THIS!
 
@@ -381,6 +409,8 @@ DO THIS!
     f2()
     ```
 
+The above function returns 100. 
+
 DO THIS!
 
 11. Create a list of all the replacement functions found in the base package. 
@@ -390,7 +420,7 @@ DO THIS!
 
 12. What are valid names for user-created infix functions?
 
-DO THIS!
+User-created infix functions must start and end with `%`. Any character or string can be between the `%`s. 
 
 13. Create an infix `xor()` operator.
 
@@ -411,7 +441,7 @@ x %xor% y
 '%u%' <- function(x, y) union(x, y)
 '%d%' <- function(x, y) setdiff(x, y)
 
-# make data based on help file
+# make data based on help file from help(union)
 x <- sample(1:20, 9)
 y <- sample(3:23, 7)
 
@@ -433,16 +463,41 @@ DO THIS!
 
 DO THIS!
 
-17.  What function undoes the action of `library()`? How do you save and restore
-    the values of `options()` and `par()`?
+17. What function undoes the action of `library()`? How do you save and restore the values of `options()` and `par()`?
 
-DO THIS!
+Packages are unloaded by using `detach("package:package_name")` where `package_name` is the name of the package one wants to unload. For example:
 
-18.  Write a function that opens a graphics device, runs the supplied code, and 
-    closes the graphics device (always, regardless of whether or not the plotting 
-    code worked).
+```{r, collapse = TRUE}
+# load the epmr package 
+library(epmr)
 
-DO THIS!
+# unload the epmr package
+detach(package:epmr)
+```
+
+Values of of `options()` and `par()` can be saved by running the function and assigning the result to an object. The values can be restored by using the new object as an argument in the original function. For example:
+
+```{r, eval = FALSE}
+# save par values
+saved_par <- par()
+
+# restore par values
+par(saved_par)
+
+# save options values
+saved_ops <- options()
+
+# restore options values
+options(saved_ops)
+```
+
+18. Write a function that opens a graphics device, runs the supplied code, and closes the graphics device (always, regardless of whether or not the plotting code worked).
+
+```{r, eval = FALSE}
+x11()              # opens graphics device
+plot(1:10, 1:10)   # plots some supplied code
+dev.off()          # closes graphics device
+```
 
 19.  We can use `on.exit()` to implement a simple version of `capture.output()`.
 
