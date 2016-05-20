@@ -6,18 +6,15 @@ author: "Jayden Nord"
 ## Exercises
 
 ### Data structures
-1. What are the six types of atomic vector? How does a list differ from an
-   atomic vector?
+1. What are the six types of atomic vector? How does a list differ from an atomic vector?
 
 Logical, integer, double, character, complex, and raw.
 
-1. What makes `is.vector()` and `is.numeric()` fundamentally different to
-   `is.list()` and `is.character()`?
+2. What makes `is.vector()` and `is.numeric()` fundamentally different to `is.list()` and `is.character()`?
    
 DO THIS!
 
-1. Test your knowledge of vector coercion rules by predicting the output of
-   the following uses of `c()`:
+3. Test your knowledge of vector coercion rules by predicting the output of the following uses of `c()`:
 
     ```{r, eval=FALSE}
     c(1, FALSE)       # numeric vector of 1 0
@@ -26,93 +23,89 @@ DO THIS!
     c(TRUE, 1L)       # numeric vector of 1 1
     ```
 
-1.  Why do you need to use `unlist()` to convert a list to an 
-    atomic vector? Why doesn't `as.vector()` work? 
+4. Why do you need to use `unlist()` to convert a list to an atomic vector? Why doesn't `as.vector()` work? 
 
 DO THIS!
 
-1. Why is `1 == "1"` true? Why is `-1 < FALSE` true? Why is `"one" < 2` false?
+5. Why is `1 == "1"` true? Why is `-1 < FALSE` true? Why is `"one" < 2` false?
 
     * `1 == "1"` is true because the numeric 1 is coerced to a character.
     * `-1 < FALSE` is true because the logical FALSE is coerced to a numeric which turns out to be 0. 
     * `"one" < 2` is false because first, the numeric 2 is coerced to a character. Certain characters are "greater" than others. `"one"` begins with the letter "o" which is greater than the character 2.
 
-1. Why is the default missing value, `NA`, a logical vector? What's special
+6. Why is the default missing value, `NA`, a logical vector? What's special
    about logical vectors? (Hint: think about `c(FALSE, NA_character_)`.)
 
 There is no clear indication in the text. However, logical tends to be the bottom of the coercion hierarchy. `NA` will be coerced up to the appropriate mode depending on other content in the vector. If `NA` was of some higher mode, any intended vector elements will be coerced up to match `NA` when it should be the other way around (as illustrated in the hint).
 
-1.  An early draft used this code to illustrate `structure()`:
+7. An early draft used this code to illustrate `structure()`:
 
-    ```{r}
+    ```{r, collapse = TRUE}
     structure(1:5, comment = "my attribute")
     ```
 
-    But when you print that object you don't see the comment attribute.
-    Why? Is the attribute missing, or is there something else special about
-    it? (Hint: try using help.) \index{attributes!comment}
+    But when you print that object you don't see the comment attribute. Why? Is the attribute missing, or is there something else special about it? (Hint: try using help.) \index{attributes!comment}
 
 DO THIS!
 
-1.  What happens to a factor when you modify its levels? 
+8. What happens to a factor when you modify its levels? 
     
-    ```{r, results = "none"}
-    f1 <- factor(letters)
-    levels(f1) <- rev(levels(f1))
-    ```
+```{r, results = "none"}
+f1 <- factor(letters)
+levels(f1) <- rev(levels(f1))
+```
     
 The labels for the factors are substituted with the new set of labels. The underlying data is unchanged. To illustrate:
 
-    ```{r, collapse = TRUE}
-    f1 <- factor(letters)
-    str(f1)
-    
-    levels(f1) <- rev(levels(f1))
-    str(f1)
-    ```
+```{r, collapse = TRUE}
+f1 <- factor(letters)
+str(f1)
 
-1.  What does this code do? How do `f2` and `f3` differ from `f1`?
+levels(f1) <- rev(levels(f1))
+str(f1)
+```
 
-    ```{r, results = "none"}
-    f2 <- rev(factor(letters))
+9. What does this code do? How do `f2` and `f3` differ from `f1`?
 
-    f3 <- factor(letters, levels = rev(letters))
-    ```
+```{r, eval = FALSE}
+f2 <- rev(factor(letters))
+
+f3 <- factor(letters, levels = rev(letters))
+```
 DO THIS!    
 
-1.  What does `dim()` return when applied to a vector?
+10. What does `dim()` return when applied to a vector?
 
 `NULL` is returned.
 
-1.  If `is.matrix(x)` is `TRUE`, what will `is.array(x)` return?
+11.  If `is.matrix(x)` is `TRUE`, what will `is.array(x)` return?
 
 `is.array(x)` will also return `TRUE` because matrices are merely special cases of arrays. If something is a matrix, then by definition that something is an array.
 
-1.  How would you describe the following three objects? What makes them
-    different to `1:5`?
+12. How would you describe the following three objects? What makes them different to `1:5`?
 
-    ```{r}
-    x1 <- array(1:5, c(1, 1, 5))
-    x2 <- array(1:5, c(1, 5, 1))
-    x3 <- array(1:5, c(5, 1, 1))
-    ```
+```{r}
+x1 <- array(1:5, c(1, 1, 5))
+x2 <- array(1:5, c(1, 5, 1))
+x3 <- array(1:5, c(5, 1, 1))
+```
 
-DO THIS!
+The set of `x`s are arrays of mode numeric with three dimensions, two of which have length 1 and the other of length 5. The vector `1:5` has only one dimension of length 5.
 
-1.  What attributes does a data frame possess?
+13. What attributes does a data frame possess?
 
-Data frames possess names, row names, and class attributes. For example:
+Data frames possess names, row names, and class attributes. For example.
 
-    ```{r, collapse = TRUE}
-    attributes(mtcars)
-    ```
+```{r, collapse=TRUE}
+attributes(mtcars)
+```
 
-1.  What does `as.matrix()` do when applied to a data frame with 
+14.  What does `as.matrix()` do when applied to a data frame with 
     columns of different types?
 
 The function will attempt to coerce the different column types to the same mode as whatever column has the mode highest on the coercion hierarchy. 
 
-1.  Can you have a data frame with 0 rows? What about 0 columns?
+15.  Can you have a data frame with 0 rows? What about 0 columns?
 
 Yes and yes!
 
@@ -140,12 +133,12 @@ Yes and yes!
     mtcars[mtcars$cyl == 4 | mtcars$cyl == 6, ]
     ```
 
-1.  Why does `x <- 1:5; x[NA]` yield five missing values? (Hint: why is 
+2.  Why does `x <- 1:5; x[NA]` yield five missing values? (Hint: why is 
     it different from `x[NA_real_]`?)
 
 DO THIS!
 
-1.  What does `upper.tri()` return? How does subsetting a matrix with it 
+3.  What does `upper.tri()` return? How does subsetting a matrix with it 
     work? Do we need any additional subsetting rules to describe its behaviour?
 
     ```{r, eval = FALSE}
@@ -157,12 +150,12 @@ The function `upper.tri()` returns a numeric vector.
 
 DO THIS!
 
-1.  Why does `mtcars[1:20]` return an error? How does it differ from the 
+4.  Why does `mtcars[1:20]` return an error? How does it differ from the 
     similar `mtcars[1:20, ]`?
     
 An error is returned because mtcars has more than one dimension. An attempt is being made to index on only one dimension. `mtcars[1:20, ]` correctly recognizes the 2 dimensions and will resolve.
 
-1.  Implement your own function that extracts the diagonal entries from a
+5.  Implement your own function that extracts the diagonal entries from a
     matrix (it should behave like `diag(x)` where `x` is a matrix).
     
     ```{r, collapse = TRUE}
@@ -180,13 +173,11 @@ An error is returned because mtcars has more than one dimension. An attempt is b
     identical(diag(x), own_diag(x))
     ```
 
-1.  What does `df[is.na(df)] <- 0` do? How does it work?
+6.  What does `df[is.na(df)] <- 0` do? How does it work?
 
 Wherever there are `NA` values in `df`, those values are made to equal 0. The `is.na(df)` function builds a logical array of same dimensions as `df`. Values of `TRUE` are wherever there are `NA` values. 0's are assigned to the dimensional indices on `df` corresponding to wherever the logical array is `TRUE`.
 
-1.  Given a linear model, e.g., `mod <- lm(mpg ~ wt, data = mtcars)`, extract
-    the residual degrees of freedom. Extract the R squared from the model
-    summary (`summary(mod)`)
+7.  Given a linear model, e.g., `mod <- lm(mpg ~ wt, data = mtcars)`, extract the residual degrees of freedom. Extract the R squared from the model summary (`summary(mod)`)
     
     ```{r, collapse=TRUE}
     mod <- lm(mpg ~ wt, data = mtcars)
@@ -196,21 +187,32 @@ Wherever there are `NA` values in `df`, those values are made to equal 0. The `i
     summary(mod)$r.squared
     ```
 
-1.  How would you randomly permute the columns of a data frame? (This is an
-    important technique in random forests.) Can you simultaneously permute 
-    the rows and columns in one step?
+8.  How would you randomly permute the columns of a data frame? (This is an important technique in random forests.) Can you simultaneously permute the rows and columns in one step?
 
-DO THIS!
+Columns (and rows, simultaneously) can be randomly permuted by randomly sampling the dimension names into a new order and using that random sample as an index for the dimension. For example:
 
-1.  How would you select a random sample of `m` rows from a data frame? 
+```{r, collapse = TRUE}
+# original mtcars
+head(mtcars)
+
+# random permuted columns and rows
+head(mtcars[sample(rownames(mtcars)), sample(colnames(mtcars))])
+```
+
+9.  How would you select a random sample of `m` rows from a data frame? 
     What if the sample had to be contiguous (i.e., with an initial row, a 
     final row, and every row in between)?
 
 DO THIS!
 
-1.  How could you put the columns in a data frame in alphabetical order?
+10.  How could you put the columns in a data frame in alphabetical order?
 
-DO THIS!
+By using order on the column names of the data frame in order to get the index of the column names in ascending order.
+
+```{r, collapse = TRUE}
+ordered <- order(colnames(mtcars))
+head(mtcars[, ordered])
+```
 
 ### Vocabulary
 
@@ -226,10 +228,22 @@ There are no exercises for this chapter.
 
 1.  What function allows you to tell if an object is a function? What function
     allows you to tell if a function is a primitive function?
+    
+    ```{r, collapse = TRUE}
+    # is.function() tells that an object is a function
+    
+    x <- 5
+    
+    is.function(mean)
+    
+    is.function(x)
+    
+    # is.primitive() tells that a function is a primitive function
+    
+    is.primitive(sum)
+    ```
 
-DO THIS!
-
-1.  This code makes a list of all functions in the base package. 
+2.  This code makes a list of all functions in the base package. 
     
     ```{r}
     objs <- mget(ls("package:base"), inherits = TRUE)
@@ -240,14 +254,40 @@ DO THIS!
 
     a. Which base function has the most arguments?
     
-    a. How many base functions have no arguments? What's special about those
+    ```{r, collapse = TRUE}
+    num_formals <- sapply(funs, function(i) length(formals(i)))
+    most_args <- which.max(num_formals)
+    names(most_args)
+    ```
+    
+    b. How many base functions have no arguments? What's special about those
        functions?
        
-    a. How could you adapt the code to find all primitive functions?
+    ```{r, collapse = TRUE}
+    no_formals <- which(num_formals == 0)
+    
+    length(no_formals)
+    
+    # Most are primitive functions while others make calls to internal functions
+    
+    # A primitive function...
+    names(no_formals[45])
+    as.double
+    
+    # A function that calls an internal...
+    names(no_formals[100])
+    geterrmessage
+    ```
+       
+    c. How could you adapt the code to find all primitive functions?
+    
+    ```{r, collapse = TRUE}
+    # Before, had funs <- Filter(is.function, objs)
+    prims <- Filter(is.primitive, objs)
+    length(prims)
+    ```
 
-DO THIS!
-
-1. What are the three important components of a function?
+3. What are the three important components of a function?
 
     1. body, the code that makes up the function
     2. formals, also known as the arguments
@@ -266,11 +306,15 @@ DO THIS!
     environment(some_function)
     ```
 
-1. When does printing a function not show what environment it was created in?
+4. When does printing a function not show what environment it was created in?
 
-DO THIS!
+Whenever a function is a primitive, it will not show what environment it was created in. For example: 
 
-1. What does the following code return? Why? What does each of the three `c`'s mean?
+```{r, collapse = TRUE}
+print(sum)
+```
+
+5. What does the following code return? Why? What does each of the three `c`'s mean?
 
     ```{r, eval = FALSE}
     c <- 10
@@ -279,12 +323,17 @@ DO THIS!
 
 DO THIS!
 
-1. What are the four principles that govern how R looks for values?
+6. What are the four principles that govern how R looks for values?
+
+The four principles are:
+* name masking
+* functions vs. variables
+* a fresh start
+* dynamic lookup
 
 DO THIS!
 
-1. What does the following function return? Make a prediction before 
-   running the code yourself.
+7. What does the following function return? Make a prediction before running the code yourself.
 
     ```{r, eval = FALSE}
     f <- function(x) {
@@ -299,9 +348,9 @@ DO THIS!
     f(10)
     ```
 
-DO THIS!
+The above will return 202. Essentially, the function does `((10 ^ 2) + 1) * 2` which equals 202.
 
-1.  Clarify the following list of odd function calls:
+8.  Clarify the following list of odd function calls:
 
     ```{r, eval = FALSE}
     x <- sample(replace = TRUE, 20, x = c(1:10, NA))
@@ -311,7 +360,7 @@ DO THIS!
 
 DO THIS!
 
-1.  What does this function return? Why? Which principle does it illustrate?
+9.  What does this function return? Why? Which principle does it illustrate?
   
     ```{r, eval = FALSE}    
     f1 <- function(x = {y <- 1; 2}, y = 0) {
@@ -322,7 +371,7 @@ DO THIS!
 
 DO THIS!
 
-1.  What does this function return? Why? Which principle does it illustrate?
+10.  What does this function return? Why? Which principle does it illustrate?
 
     ```{r, eval = FALSE}
     f2 <- function(x = z) {
@@ -334,45 +383,68 @@ DO THIS!
 
 DO THIS!
 
-1. Create a list of all the replacement functions found in the base package. 
+11. Create a list of all the replacement functions found in the base package. 
    Which ones are primitive functions?
 
 DO THIS!
 
-1. What are valid names for user-created infix functions?
+12. What are valid names for user-created infix functions?
 
 DO THIS!
 
-1. Create an infix `xor()` operator.
+13. Create an infix `xor()` operator.
+
+```{r, collapse = TRUE}
+x <- c(TRUE, TRUE, FALSE)
+y <- c(TRUE, FALSE, FALSE)
+'%xor%' <- function(x, y) xor(x, y)
+
+xor(x, y)
+
+x %xor% y
+```
+
+14. Create infix versions of the set functions `intersect()`, `union()`, and `setdiff()`.
+
+```{r, collapse = TRUE}
+'%i%' <- function(x, y) intersect(x, y)
+'%u%' <- function(x, y) union(x, y)
+'%d%' <- function(x, y) setdiff(x, y)
+
+# make data based on help file
+x <- sample(1:20, 9)
+y <- sample(3:23, 7)
+
+x
+y
+
+# demonstrate infix functions
+x %i% y
+x %u% y
+x %d% y
+```
+
+15. Create a replacement function that modifies a random location in a vector.
 
 DO THIS!
 
-1. Create infix versions of the set functions `intersect()`, `union()`, and 
-   `setdiff()`.
-
-DO THIS!
-
-1. Create a replacement function that modifies a random location in a vector.
-
-DO THIS!
-
-1.  How does the `chdir` parameter of `source()` compare to `in_dir()`? Why 
+16.  How does the `chdir` parameter of `source()` compare to `in_dir()`? Why 
     might you prefer one approach to the other?
 
 DO THIS!
 
-1.  What function undoes the action of `library()`? How do you save and restore
+17.  What function undoes the action of `library()`? How do you save and restore
     the values of `options()` and `par()`?
 
 DO THIS!
 
-1.  Write a function that opens a graphics device, runs the supplied code, and 
+18.  Write a function that opens a graphics device, runs the supplied code, and 
     closes the graphics device (always, regardless of whether or not the plotting 
     code worked).
 
 DO THIS!
 
-1.  We can use `on.exit()` to implement a simple version of `capture.output()`.
+19.  We can use `on.exit()` to implement a simple version of `capture.output()`.
 
     ```{r}
     capture.output2 <- function(code) {
