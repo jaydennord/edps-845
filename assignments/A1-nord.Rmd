@@ -48,7 +48,7 @@ some.name
 
 3. How do you list all available objects in the R workspace? And how do you remove individual objects?
 
-```{r}
+```{r, collapse = TRUE}
 # make some objects
 x <- 10; y <- 5; z <- 2
 
@@ -64,7 +64,7 @@ ls()        # confirm removal
 
 1. Create and index a vector using a logical, integer, negative integer, and character vector.
 
-```{r}
+```{r, collapse = TRUE}
 # some vectors
 pets <- c("dogs", "cats", "birds", "hamsters", "mice", "snakes")
 pets2 <- c(20, 30, 15, 50, 20, 19) # just some random numbers
@@ -85,7 +85,7 @@ pets2[c("dogs", "cats", "birds", "snakes")]
 
 2. Create a simple data frame containing a numeric variable, character variable, and factor with at least 3 levels. Use the data frame to demonstrate how R codes and handles missing data. 
 
-```{r}
+```{r, collapse = TRUE}
 # make data frame
 d <- data.frame(
   x = 1:10,
@@ -108,7 +108,7 @@ print(d)
 
 1. Demonstrate how to check and change the modes and attributes of R objects.
 
-```{r}
+```{r, collapse = TRUE}
 x <- 1:10
 y <- letters[1:10]
 
@@ -125,7 +125,7 @@ mode(z)
 
 1. Complete the exercise on page 17, where you calculate 95% confidence intervals for state mean incomes.
 
-```{r}
+```{r, collapse = TRUE}
 state <- c("tas", "sa", "qld", "nsw", "nsw", "nt", "wa", "wa",
   "qld", "vic", "nsw", "vic", "qld", "qld", "sa", "tas",
   "sa", "nt", "wa", "vic", "qld", "nsw", "nsw", "wa",
@@ -145,9 +145,7 @@ desc <- within(desc, {
   lower <- mean - error
   upper <- mean + error
 })
-```
 
-```{r}
 desc[, c("lower", "mean", "upper")]
 ```
 
@@ -160,17 +158,21 @@ Levels of ordered factors are stored in alphabetical order.
 
 1. Create an array with dimensions `c(3, 6, 2)` and use it to demonstrate array indexing.
 
-```{r}
+```{r, collapse = TRUE}
 arr <- array(1:(3 * 6 * 2), dim = c(3, 6, 2))
+
 arr
 arr[1, ,]
+
 arr[1, 3, ]
+
 arr[1, 3, 2]
+
 arr[ , 3, ]
 ```
 
 2. Create a two dimensional array of 100 integers sampled with replacement from the vector 1:20, and use an index array to set the diagonal values to 0.
-```{r}
+```{r, collapse = TRUE}
 elements <- sample(1:20, size = 100, replace = TRUE)
 mat1 <- elements
 dim(mat1) <- c(10, 10)
@@ -182,7 +184,7 @@ mat1
 
 3. Construct the same array using the `array()` function and using a vector with the `dim()` set. Prove they are the same.
 
-```{r}
+```{r, collapse = TRUE}
 mat2 <- array(elements, dim = c(10, 10))
 i2 <- array(c(1:10, 1:10), dim = c(10, 2))
 mat2[i2] <- 0
@@ -194,7 +196,7 @@ identical(mat1, mat2)
 
 4. Use your array from 5.1, and another with the same dimensions, to demonstrate how arithmetic works with arrays.
 
-```{r}
+```{r, collapse = TRUE}
 arr2_elements <- sample(1:50, size = 3 * 6 * 2, replace = TRUE)
 arr2 <- array(arr2_elements, dim = c(3, 6, 2))
 
@@ -205,8 +207,9 @@ arr * arr2
 
 5. Show how to clear the dimensions of an array.
 
-```{r}
+```{r, collapse = TRUE}
 vec <- c(mat1) # clears dimensions of mat1
+
 vec
 ```
 
@@ -231,20 +234,18 @@ d[d$dog > 1, "dog"]
 
 2. What is the difference between giving multiple lists to `list()` versus `c()`?
 
-Lists via `list()` are comprised of "components" which can be either individual values or entire objects of varying dimensions. There may be a mixture of different types of components of different classes. List components can also have names.
+Giving multiple lists to `list()` makes a list of lists. The result's length will be the number of lists provided.
 
-Concatenations via `c()` are combinations of values of vectors into larger vectors. The resulting vector inherits the class of the concatenated values or coerces the elements into a single class. Concatenations cannot be a mixture of different data types (i.e. numeric and character).
+Giving multiple list to `c` concatenates the sets of provided lists into one larger list. The result's length is the summation of the lengths of the constituent lists. 
 
-```{r, error=TRUE}
+```{r, error=TRUE, collapse = TRUE}
 # example list
-example_list <- list(animal = "dog", feeding_times = c(3, 7, 9))
-str(example_list)
-example_list
+list1 <- list(animal = "dog", feeding_times = c(3, 7, 9))
+list2 <- list(x = 1:3, y = 9:10)
 
-# example concatenation
-example_c <- c(5, 1:10, "dog")
-str(example_c)
-example_c
+# comparing combinations of lists
+list(list1, list2)
+c(list1, list2)
 ```
 
 3. How do data frames in R relate to lists?
@@ -279,7 +280,7 @@ detach(example_list)
 
 1. Demonstrate the different approaches to reading in data from an external file.
 
-```{r}
+```{r, collapse = TRUE}
 # make a data file
 cat("animal number fed", "dog 3 2", "cat 12 4",
     sep = "\n",
@@ -310,7 +311,7 @@ unlink("some_data.dat")
 
 1. Demonstrate the use of distribution functions to simulate data and calculate probabilities and quantiles.
 
-```{r}
+```{r, collapse = TRUE}
 # simulate 10 cases from normal distribution
 #   with pop. mean of 1 and pop. sd of 1.33
 rnorm(n = 10, mean = 1, sd = 1.33)
@@ -337,7 +338,7 @@ qt(p = 1 - .05/2, df = 87)
   
 2. Simulate data from a t distribution and check their normality.
 
-```{r}
+```{r, collapse = TRUE}
 # simulated data
 d <- rt(n = 20, df = 87)
 d
@@ -355,7 +356,7 @@ The `ifelse()` function is a vectorized version of `if() else`. The function `if
 * `b[i]` where `condition[i] == FALSE`
 
 For example:
-```{r}
+```{r, collapse = TRUE}
 x <- sample(40:60)
 y <- ifelse(x > 50, 10, 5)
 print(data.frame(x = x, condition = x > 50, y = y))
@@ -363,7 +364,7 @@ print(data.frame(x = x, condition = x > 50, y = y))
 
 2. Demonstrate the use of a `for()` loop.
 
-```{r}
+```{r, collapse = TRUE}
 for(i in 1:8){
   cat("Iteration", i, "\n")
 }

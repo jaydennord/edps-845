@@ -129,10 +129,10 @@ The function will attempt to coerce the different column types to the same mode 
 
 Yes and yes!
 
-    ```{r, collapse = TRUE}
-    d <- data.frame()
-    str(d)
-    ```
+```{r, collapse = TRUE}
+d <- data.frame()
+str(d)
+```
 
 ### Subsetting
 
@@ -145,18 +145,18 @@ Yes and yes!
     mtcars[mtcars$cyl == 4 | 6, ]
     ```
     
-    ```{r, eval = FALSE}
-    # corrected
-    mtcars[mtcars$cyl == 4, ]
-    mtcars[-c(1:4), ]
-    mtcars[mtcars$cyl <= 5, ]
-    mtcars[mtcars$cyl == 4 | mtcars$cyl == 6, ]
-    ```
+```{r, eval = FALSE}
+# corrected
+mtcars[mtcars$cyl == 4, ]
+mtcars[-c(1:4), ]
+mtcars[mtcars$cyl <= 5, ]
+mtcars[mtcars$cyl == 4 | mtcars$cyl == 6, ]
+```
 
 2.  Why does `x <- 1:5; x[NA]` yield five missing values? (Hint: why is 
     it different from `x[NA_real_]`?)
 
-DO THIS!
+The logical vector of `NA` is recycled to the same length as `x`. A missing values in the resulting logicl index will always return missing, hence the five missing values. 
 
 3.  What does `upper.tri()` return? How does subsetting a matrix with it 
     work? Do we need any additional subsetting rules to describe its behaviour?
@@ -166,9 +166,7 @@ DO THIS!
     x[upper.tri(x)]
     ```
 
-The function `upper.tri()` returns a numeric vector. 
-
-DO THIS!
+The function `upper.tri()` returns a numeric vector of the upper triangle of the matrix `x`, read column-by-column. Subsetting with `upper.tri()` is subsetting with an integer index. The matrix `x` is first laid out as an atomic vector column-by-column. Then the integer index is used to return values which, here, happen to equal the index values.
 
 4.  Why does `mtcars[1:20]` return an error? How does it differ from the 
     similar `mtcars[1:20, ]`?
@@ -178,20 +176,20 @@ An error is returned because mtcars has more than one dimension. An attempt is b
 5.  Implement your own function that extracts the diagonal entries from a
     matrix (it should behave like `diag(x)` where `x` is a matrix).
     
-    ```{r, collapse = TRUE}
-    x <- outer(1:5, 1:5, FUN = "*")
-    
-    own_diag <- function(x){
-      length <- nrow(x)
-      if(length != ncol(x)) stop("Not a square matrix!")
-      i <- cbind(1:length, 1:length)
-      return(x[i])
-    }
-    
-    own_diag(x)
-    
-    identical(diag(x), own_diag(x))
-    ```
+```{r, collapse = TRUE}
+x <- outer(1:5, 1:5, FUN = "*")
+
+own_diag <- function(x){
+  length <- nrow(x)
+  if(length != ncol(x)) stop("Not a square matrix!")
+  i <- cbind(1:length, 1:length)
+  return(x[i])
+}
+
+own_diag(x)
+
+identical(diag(x), own_diag(x))
+```
 
 6.  What does `df[is.na(df)] <- 0` do? How does it work?
 
@@ -199,13 +197,13 @@ Wherever there are `NA` values in `df`, those values are made to equal 0. The `i
 
 7.  Given a linear model, e.g., `mod <- lm(mpg ~ wt, data = mtcars)`, extract the residual degrees of freedom. Extract the R squared from the model summary (`summary(mod)`)
     
-    ```{r, collapse=TRUE}
-    mod <- lm(mpg ~ wt, data = mtcars)
-    
-    mod$residuals
-    
-    summary(mod)$r.squared
-    ```
+```{r, collapse=TRUE}
+mod <- lm(mpg ~ wt, data = mtcars)
+
+mod$residuals
+
+summary(mod)$r.squared
+```
 
 8.  How would you randomly permute the columns of a data frame? (This is an important technique in random forests.) Can you simultaneously permute the rows and columns in one step?
 
@@ -219,11 +217,23 @@ head(mtcars)
 head(mtcars[sample(rownames(mtcars)), sample(colnames(mtcars))])
 ```
 
-9.  How would you select a random sample of `m` rows from a data frame? 
-    What if the sample had to be contiguous (i.e., with an initial row, a 
-    final row, and every row in between)?
+9. How would you select a random sample of `m` rows from a data frame? What if the sample had to be contiguous (i.e., with an initial row, a final row, and every row in between)?
 
-DO THIS!
+```{r, collapse = TRUE}
+# example data frame
+d <- data.frame(x = 1:10, y = 11:20)
+
+# random sample of rows
+m <- sample(rownames(d))
+m
+
+# contiguous random sample of rows
+rows <- rownames(d)
+last <- length(rows)
+between <- rows[(1 + 1):(last - 1)]
+m <- c(rows[1], sample(between), rows[last])
+m
+```
 
 10.  How could you put the columns in a data frame in alphabetical order?
 
@@ -244,24 +254,21 @@ There are no exercises for this chapter.
 
 ### Functions
 
-19 exercises
+1.  What function allows you to tell if an object is a function? What function allows you to tell if a function is a primitive function?
+    
+```{r, collapse = TRUE}
+# is.function() tells that an object is a function
 
-1.  What function allows you to tell if an object is a function? What function
-    allows you to tell if a function is a primitive function?
-    
-    ```{r, collapse = TRUE}
-    # is.function() tells that an object is a function
-    
-    x <- 5
-    
-    is.function(mean)
-    
-    is.function(x)
-    
-    # is.primitive() tells that a function is a primitive function
-    
-    is.primitive(sum)
-    ```
+x <- 5
+
+is.function(mean)
+
+is.function(x)
+
+# is.primitive() tells that a function is a primitive function
+
+is.primitive(sum)
+```
 
 2.  This code makes a list of all functions in the base package. 
     
@@ -274,38 +281,38 @@ There are no exercises for this chapter.
 
     a. Which base function has the most arguments?
     
-    ```{r, collapse = TRUE}
-    num_formals <- sapply(funs, function(i) length(formals(i)))
-    most_args <- which.max(num_formals)
-    names(most_args)
-    ```
+```{r, collapse = TRUE}
+num_formals <- sapply(funs, function(i) length(formals(i)))
+most_args <- which.max(num_formals)
+names(most_args)
+```
     
     b. How many base functions have no arguments? What's special about those
        functions?
        
-    ```{r, collapse = TRUE}
-    no_formals <- which(num_formals == 0)
-    
-    length(no_formals)
-    
-    # Most are primitive functions while others make calls to internal functions
-    
-    # A primitive function...
-    names(no_formals[45])
-    as.double
-    
-    # A function that calls an internal...
-    names(no_formals[100])
-    geterrmessage
-    ```
+```{r, collapse = TRUE}
+no_formals <- which(num_formals == 0)
+
+length(no_formals)
+
+# Most are primitive functions while others make calls to internal functions
+
+# A primitive function...
+names(no_formals[45])
+as.double
+
+# A function that calls an internal...
+names(no_formals[100])
+geterrmessage
+```
        
     c. How could you adapt the code to find all primitive functions?
     
-    ```{r, collapse = TRUE}
-    # Before, had funs <- Filter(is.function, objs)
-    prims <- Filter(is.primitive, objs)
-    length(prims)
-    ```
+```{r, collapse = TRUE}
+# Before, had funs <- Filter(is.function, objs)
+prims <- Filter(is.primitive, objs)
+length(prims)
+```
 
 3. What are the three important components of a function?
 
@@ -313,18 +320,18 @@ There are no exercises for this chapter.
     2. formals, also known as the arguments
     3. environment, location of the function's variables
 
-    ```{r, collapse = TRUE}
-    some_function <- function(x) {
-      deviates <- (x - mean(x))
-      return(deviates^2)
-    }
-    
-    body(some_function)
-    
-    formals(some_function)
-    
-    environment(some_function)
-    ```
+```{r, collapse = TRUE}
+some_function <- function(x) {
+  deviates <- (x - mean(x))
+  return(deviates^2)
+}
+
+body(some_function)
+
+formals(some_function)
+
+environment(some_function)
+```
 
 4. When does printing a function not show what environment it was created in?
 
@@ -347,12 +354,12 @@ The above code returns the value 10 with name "c". In `c(c=c)`, the first `c` is
 
 The four principles are:
 
-* name masking
-* functions vs. variables
-* a fresh start
-* dynamic lookup
-
-DO THIS!
+Principle | Description 
+-------------------| -------------------------------------------
+name masking             | If the function cannot find the name of an object defined within the function, it will look for it one level above.
+functions vs. variables  | Like name masking; involves searching for function names than other object names.
+a fresh start            | Each time a function is run, an environment is created for that specfic invocation of that function. Value definitions in a function occur within that freshly created environment. 
+dynamic lookup           | Values are searched only at each invocation of the function.
 
 7. What does the following function return? Make a prediction before running the code yourself.
 
@@ -379,12 +386,12 @@ The above will return 202. Essentially, the function does `((10 ^ 2) + 1) * 2` w
     cor(m = "k", y = y, u = "p", x = x)
     ```
 
-    ```{r, eval = FALSE}
-    # clarified function calls
-    x <- sample(c(1:10, NA), size = 20, replace = TRUE)
-    y <- runif(n = 20, min = 0, max = 1)
-    cor(x, y, method = "kendall")
-    ```
+```{r, eval = FALSE}
+# clarified function calls
+x <- sample(c(1:10, NA), size = 20, replace = TRUE)
+y <- runif(n = 20, min = 0, max = 1)
+cor(x, y, method = "kendall")
+```
 
 9.  What does this function return? Why? Which principle does it illustrate?
   
@@ -395,9 +402,7 @@ The above will return 202. Essentially, the function does `((10 ^ 2) + 1) * 2` w
     f1()
     ```
 
-The above function returns the value 3. 
-
-DO THIS!
+The above function returns the value 3. This demonstrates the "a fresh start" principle. The default for `x` assigns a value to `y`, overwriting the default option of 0. 
 
 10.  What does this function return? Why? Which principle does it illustrate?
 
@@ -409,14 +414,24 @@ DO THIS!
     f2()
     ```
 
-The above function returns 100. 
-
-DO THIS!
+The above function returns 100. This demonstrates the "dynamic lookup" principle. The value of `x` is not searched until it's called. Within the function, `z` is assigned the value of 100. Now that `z` exists within the function, calling `x` will call an existing `z` and thus the value of `z`.
 
 11. Create a list of all the replacement functions found in the base package. 
    Which ones are primitive functions?
 
-DO THIS!
+```{r, collapse = TRUE}
+objs <- mget(ls("package:base"), inherits = TRUE)
+objs_names <- names(objs)
+
+# replacement functions
+grep(pattern = "<-", objs_names, value = TRUE)
+
+prims <- Filter(is.primitive, objs)
+prims_names <- names(prims)
+
+# primitive replacement functions
+grep(pattern = "<-", prims_names, value = TRUE)
+```
 
 12. What are valid names for user-created infix functions?
 
@@ -456,12 +471,23 @@ x %d% y
 
 15. Create a replacement function that modifies a random location in a vector.
 
-DO THIS!
+```{r, collapse = TRUE}
+x <- letters
+x
 
-16.  How does the `chdir` parameter of `source()` compare to `in_dir()`? Why 
-    might you prefer one approach to the other?
+'rando<-' <- function(x, value){
+  i <- sample(1:length(x), size = 1)
+  x[i] <- value
+  x
+}
 
-DO THIS!
+rando(x) <- "modified"
+x
+```
+
+16. How does the `chdir` parameter of `source()` compare to `in_dir()`? Why might you prefer one approach to the other?
+
+Both `source()` and `in_dir()` go to some directory to run some code. The default parameter for `chdir` is `FALSE`, meaning R's working directory will not be changed to the directory wherever the code is run. The function `source()` is meant to run code contained in text files. The function `in_dir()` does not access text files to run code.
 
 17. What function undoes the action of `library()`? How do you save and restore the values of `options()` and `par()`?
 
@@ -501,7 +527,7 @@ dev.off()          # closes graphics device
 
 19.  We can use `on.exit()` to implement a simple version of `capture.output()`.
 
-    ```{r}
+    ```{r, eval = FALSE}
     capture.output2 <- function(code) {
       temp <- tempfile()
       on.exit(file.remove(temp), add = TRUE)
@@ -519,4 +545,4 @@ dev.off()          # closes graphics device
     differ? What features have I removed to make the key ideas easier to see? 
     How have I rewritten the key ideas to be easier to understand?
 
-DO THIS!
+The original `capture.output()` has additional arguments and its body has more code with various `if` statements. The function `capture.output2` makes clear the functionality of the `on.exit` command which evaluates its given arguments after the function has completed. In the function, a temp file is created to which results from `code` are sinked to and also read to the console. At the end of the function the temporary file is deleted and sinking is returned to the console.
