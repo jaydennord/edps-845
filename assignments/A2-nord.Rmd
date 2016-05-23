@@ -520,7 +520,6 @@ options(saved_ops)
 18. Write a function that opens a graphics device, runs the supplied code, and closes the graphics device (always, regardless of whether or not the plotting code worked).
 
 ```{r, eval = FALSE}
-
 my_fun <- function(...){
   x11()
   plot(...)
